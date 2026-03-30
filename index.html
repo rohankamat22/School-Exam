@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Entrance Examination 2083</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a1628;
+      --deep: #0f2044;
+      --gold: #c9a84c;
+      --gold-light: #e8c86d;
+      --cream: #f5f0e8;
+      --white: #ffffff;
+      --text: #1a2940;
+      --muted: #6b7fa3;
+      --correct: #1a7a4a;
+      --wrong: #b03030;
+      --border: rgba(201, 168, 76, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(10, 22, 40, 0.85), rgba(10, 22, 40, 0.95)),
+        url('bg.png') center/cover no-repeat;
+      z-index: -1;
+    }
+
+    /* ─── PAGES ─── */
+    .page {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .page.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes shimmer {
+
+      0%,
+      100% {
+        opacity: .6
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ─── CREST / LOGO ─── */
+    .logo-img {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .crest {
+      width: 140px;
+      height: 140px;
+      border: 3px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.2), inset 0 0 30px rgba(201, 168, 76, 0.05);
+      position: relative;
+    }
+
+    /* ─── COVER PAGE ─── */
+    #cover {
+      text-align: center;
+    }
+
+    .school-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 5vw, 44px);
+      font-weight: 900;
+      color: var(--gold-light);
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .school-sub {
+      font-size: 13px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .year-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      padding: 6px 20px;
+      border-radius: 2px;
+      margin-bottom: 48px;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 36px;
+    }
+
+    /* ─── FORM ─── */
+    .form-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 40px;
+      width: 100%;
+      max-width: 440px;
+      backdrop-filter: blur(10px);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 7px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 22px;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.07);
+    }
+
+    .form-input option {
+      background: var(--deep);
+      color: var(--white);
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--navy);
+      border: none;
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201, 168, 76, 0.35);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ─── EXAM PAGE ─── */
+    #exam {
+      justify-content: flex-start;
+      padding-top: 0;
+    }
+
+    .exam-header {
+      width: 100%;
+      background: rgba(10, 22, 40, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    .exam-header-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exam-header-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+
+    .exam-header-class {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      margin: 0 32px;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      letter-spacing: 0.1em;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .q-counter {
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .q-counter span {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    .exam-body {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      flex: 1;
+    }
+
+    .question-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      margin-bottom: 24px;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .q-number {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .q-text {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9px;
+      padding: 13px 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.1s;
+    }
+
+    .option:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.07);
+      transform: translateX(3px);
+    }
+
+    .option.selected {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.12);
+    }
+
+    .option input[type="radio"] {
+      display: none;
+    }
+
+    .opt-bullet {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(201, 168, 76, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .option.selected .opt-bullet {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+
+    .opt-text {
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.4;
+    }
+
+    .exam-nav {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: 7px;
+      padding: 11px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(201, 168, 76, 0.1);
+    }
+
+    .btn-finish {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+      border: none;
+      border-radius: 7px;
+      padding: 11px 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-finish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    /* Q Navigator */
+    .q-nav-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .q-nav-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .q-nav-dot.answered {
+      background: rgba(201, 168, 76, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .q-nav-dot.current {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+
+    /* ─── RESULT PAGE ─── */
+    #result {
+      text-align: center;
+    }
+
+    .result-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 44px 48px;
+      width: 100%;
+      max-width: 600px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+    }
+
+    .result-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+    }
+
+    .result-name {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+    }
+
+    .score-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      background: radial-gradient(circle, rgba(201, 168, 76, 0.1), transparent 70%);
+      box-shadow: 0 0 50px rgba(201, 168, 76, 0.2);
+    }
+
+    .score-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .score-total {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.1em;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 8px 28px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .grade-badge.pass {
+      background: rgba(26, 122, 74, 0.2);
+      border: 1px solid rgba(26, 122, 74, 0.5);
+      color: #4ade80;
+    }
+
+    .grade-badge.fail {
+      background: rgba(176, 48, 48, 0.2);
+      border: 1px solid rgba(176, 48, 48, 0.5);
+      color: #f87171;
+    }
+
+    .result-breakdown {
+      width: 100%;
+      text-align: left;
+    }
+
+    .breakdown-title {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+
+    .breakdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .bd-q {
+      flex: 1;
+      color: var(--cream);
+      line-height: 1.4;
+    }
+
+    .bd-your {
+      min-width: 100px;
+      text-align: right;
+    }
+
+    .bd-correct-ans {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .tag.c {
+      background: rgba(26, 122, 74, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(26, 122, 74, 0.3);
+    }
+
+    .tag.w {
+      background: rgba(176, 48, 48, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(176, 48, 48, 0.3);
+    }
+
+    .tag.s {
+      background: rgba(107, 127, 163, 0.2);
+      color: var(--muted);
+      border: 1px solid rgba(107, 127, 163, 0.3);
+    }
+
+    .btn-restart {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: 7px;
+      padding: 13px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-restart:hover {
+      background: rgba(201, 168, 76, 0.1);
+    }
+
+    .error-msg {
+      color: #f87171;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    @media(max-width:520px) {
+
+      .form-card,
+      .result-card {
+        padding: 28px 22px;
+      }
+
+      .exam-header {
+        padding: 12px 16px;
+      }
+
+      .progress-wrap {
+        margin: 0 14px;
+      }
+
+      .exam-body {
+        padding: 24px 14px;
+      }
+
+      .question-card {
+        padding: 22px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ COVER PAGE ══════════════ -->
+  <div id="cover" class="page active">
+    <div class="crest">
+      <img viewBox="0 0 80 80" fill="none" src="logo.jpg" alt="School Logo" class="logo-img">
+      <path d="M40 8L52 20H68V36L72 40L68 44V60H52L40 72L28 60H12V44L8 40L12 36V20H28L40 8Z" stroke="#c9a84c"
+        stroke-width="1.5" fill="rgba(201,168,76,0.08)" />
+      <path d="M40 18L30 28H20V38L17 40L20 42V52H30L40 62L50 52H60V42L63 40L60 38V28H50L40 18Z" stroke="#c9a84c"
+        stroke-width="1" stroke-dasharray="3 2" fill="none" />
+      <circle cx="40" cy="40" r="10" stroke="#c9a84c" stroke-width="1.5" fill="rgba(201,168,76,0.12)" />
+      <path d="M40 32V48M32 40H48" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" />
+      <circle cx="40" cy="40" r="3" fill="#c9a84c" />
+      </svg>
+    </div>
+
+    <h1 class="school-name">Shankar National<br>School</h1>
+    <p class="school-sub">Excellence · Knowledge · Character</p>
+    <div class="year-badge">Admission Examination — 2083 B.S.</div>
+    <div class="divider"></div>
+
+    <div class="form-card">
+      <label class="form-label" for="studentName">Full Name</label>
+      <input class="form-input" id="studentName" type="text" placeholder="Enter your full name" autocomplete="off" />
+
+      <label class="form-label" for="classSelect">Select Class</label>
+      <select class="form-input" id="classSelect">
+        <option value="">— Choose your class —</option>
+        <option value="1">Class 1</option>
+        <option value="2">Class 2</option>
+        <option value="3">Class 3</option>
+        <option value="4">Class 4</option>
+        <option value="5">Class 5</option>
+        <option value="6">Class 6</option>
+        <option value="7">Class 7</option>
+        <option value="8">Class 8</option>
+        <option value="9">Class 9</option>
+      </select>
+
+      <button class="btn" id="startBtn" onclick="startExam()">Begin Examination</button>
+      <div class="error-msg" id="coverError"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ EXAM PAGE ══════════════ -->
+  <div id="exam" class="page">
+    <div class="exam-header">
+      <div class="exam-header-info">
+        <div class="exam-header-name" id="hdrName"></div>
+        <div class="exam-header-class" id="hdrClass"></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label" id="progressLabel">Question 1 of 10</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="q-counter">Answered: <span id="answeredCount">0</span></div>
+    </div>
+
+    <div class="exam-body">
+      <div class="question-card" id="questionCard">
+        <div class="q-number" id="qNumber"></div>
+        <div class="q-text" id="qText"></div>
+        <div class="options" id="optionsWrap"></div>
+      </div>
+
+      <div class="q-nav-grid" id="qNavGrid"></div>
+
+      <div class="exam-nav" style="margin-top:28px">
+        <button class="btn-outline" id="prevBtn" onclick="navigate(-1)">← Previous</button>
+        <button class="btn-outline" id="nextBtn" onclick="navigate(1)">Next →</button>
+        <button class="btn-finish" id="finishBtn" onclick="finishExam()">Finish ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ RESULT PAGE ══════════════ -->
+  <div id="result" class="page">
+    <div class="result-card">
+      <div class="result-title">Examination Result</div>
+      <div class="result-name" id="resultName"></div>
+
+      <div class="score-circle">
+        <div class="score-num" id="scoreNum">0</div>
+        <div class="score-total" id="scoreTotal">/ 0 marks</div>
+      </div>
+
+      <div class="grade-badge" id="gradeBadge"></div>
+
+      <div class="result-breakdown">
+        <div class="breakdown-title">Question Review</div>
+        <div id="breakdownList"></div>
+      </div>
+    </div>
+    <button class="btn-restart" onclick="restartExam()">↺ Restart Exam</button>
+  </div>
+
+  <script>
+    // ─── QUESTION BANK ───────────────────────────────────────────
+    const QUESTIONS = {
+      1: [
+        { q: "What comes after the number 9?", opts: ["8", "10", "11", "7"], ans: 1 },
+        { q: "How many days are there in a week?", opts: ["5", "6", "7", "8"], ans: 2 },
+        { q: "Which animal says 'moo'?", opts: ["Dog", "Cat", "Cow", "Horse"], ans: 2 },
+        { q: "What color is the sky on a clear day?", opts: ["Green", "Blue", "Red", "Yellow"], ans: 1 },
+        { q: "How many fingers do we have on both hands?", opts: ["8", "9", "10", "12"], ans: 2 },
+        { q: "Which fruit is red and round?", opts: ["Banana", "Mango", "Apple", "Orange"], ans: 2 },
+        { q: "2 + 3 = ?", opts: ["4", "5", "6", "7"], ans: 1 },
+        { q: "Which is the largest animal?", opts: ["Elephant", "Dog", "Cat", "Rabbit"], ans: 0 },
+        { q: "What do we use to write on paper?", opts: ["Spoon", "Pencil", "Knife", "Fork"], ans: 1 },
+        { q: "How many wheels does a bicycle have?", opts: ["1", "2", "3", "4"], ans: 1 },
+      ],
+      2: [
+        { q: "What is 5 + 7?", opts: ["10", "11", "12", "13"], ans: 2 },
+        { q: "Which planet is known as the Red Planet?", opts: ["Venus", "Earth", "Mars", "Jupiter"], ans: 2 },
+        { q: "How many months are in a year?", opts: ["10", "11", "12", "13"], ans: 2 },
+        { q: "Which is the smallest continent?", opts: ["Asia", "Africa", "Australia", "Europe"], ans: 2 },
+        { q: "What is the opposite of 'hot'?", opts: ["Warm", "Cool", "Cold", "Freezing"], ans: 2 },
+        { q: "3 × 4 = ?", opts: ["10", "11", "12", "14"], ans: 2 },
+        { q: "Which animal lives in water?", opts: ["Lion", "Eagle", "Fish", "Deer"], ans: 2 },
+        { q: "How many vowels are in English?", opts: ["4", "5", "6", "7"], ans: 1 },
+        { q: "What does a plant need to grow?", opts: ["Darkness", "Water & Sunlight", "Ice", "Sand"], ans: 1 },
+        { q: "Which shape has 4 equal sides?", opts: ["Triangle", "Circle", "Rectangle", "Square"], ans: 3 },
+      ],
+      3: [
+        { q: "What is the capital of Nepal?", opts: ["Pokhara", "Biratnagar", "Kathmandu", "Lumbini"], ans: 2 },
+        { q: "8 × 7 = ?", opts: ["54", "56", "58", "62"], ans: 1 },
+        { q: "Which gas do plants release during photosynthesis?", opts: ["Carbon Dioxide", "Nitrogen", "Oxygen", "Hydrogen"], ans: 2 },
+        { q: "What is 25% of 100?", opts: ["5", "15", "25", "35"], ans: 2 },
+        { q: "How many sides does a hexagon have?", opts: ["5", "6", "7", "8"], ans: 1 },
+        { q: "Which organ pumps blood in the body?", opts: ["Liver", "Lungs", "Brain", "Heart"], ans: 3 },
+        { q: "What is the largest ocean?", opts: ["Atlantic", "Indian", "Arctic", "Pacific"], ans: 3 },
+        { q: "48 ÷ 6 = ?", opts: ["6", "7", "8", "9"], ans: 2 },
+        { q: "Which direction does the sun rise?", opts: ["North", "South", "East", "West"], ans: 2 },
+        { q: "What is H₂O?", opts: ["Salt", "Sugar", "Water", "Air"], ans: 2 },
+      ],
+      4: [
+        { q: "What is the square root of 81?", opts: ["7", "8", "9", "10"], ans: 2 },
+        { q: "Who wrote 'Romeo and Juliet'?", opts: ["Dickens", "Shakespeare", "Keats", "Chaucer"], ans: 1 },
+        { q: "Which is the longest river in the world?", opts: ["Amazon", "Congo", "Nile", "Ganges"], ans: 2 },
+        { q: "12 × 12 = ?", opts: ["132", "142", "144", "146"], ans: 2 },
+        { q: "What is the chemical symbol for gold?", opts: ["Gd", "Gl", "Au", "Ag"], ans: 2 },
+        { q: "How many bones are in the adult human body?", opts: ["196", "206", "216", "226"], ans: 1 },
+        { q: "Which planet has rings around it?", opts: ["Jupiter", "Neptune", "Saturn", "Uranus"], ans: 2 },
+        { q: "What is the area of a square with side 7cm?", opts: ["14cm²", "28cm²", "42cm²", "49cm²"], ans: 3 },
+        { q: "Which gas makes up most of Earth's atmosphere?", opts: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], ans: 2 },
+        { q: "1 kilometer = how many meters?", opts: ["10", "100", "1000", "10000"], ans: 2 },
+      ],
+      5: [
+        { q: "What is the value of π (pi) approximately?", opts: ["2.14", "3.14", "4.14", "5.14"], ans: 1 },
+        { q: "Which country has the largest population?", opts: ["USA", "Russia", "India", "China"], ans: 3 },
+        { q: "15² = ?", opts: ["175", "205", "225", "255"], ans: 2 },
+        { q: "What is the powerhouse of the cell?", opts: ["Nucleus", "Ribosome", "Mitochondria", "Chloroplast"], ans: 2 },
+        { q: "Which is NOT a prime number?", opts: ["11", "13", "15", "17"], ans: 2 },
+        { q: "What is the speed of light (approx)?", opts: ["3×10⁶ m/s", "3×10⁷ m/s", "3×10⁸ m/s", "3×10⁹ m/s"], ans: 2 },
+        { q: "LCM of 4 and 6 is?", opts: ["8", "12", "16", "24"], ans: 1 },
+        { q: "Which is the smallest planet in our solar system?", opts: ["Venus", "Mars", "Mercury", "Pluto"], ans: 2 },
+        { q: "What is the full form of DNA?", opts: ["Deoxyribonucleic Acid", "Diribonucleic Acid", "Deoxyribonicotinic Acid", "None"], ans: 0 },
+        { q: "Solve: 2x + 5 = 13. What is x?", opts: ["3", "4", "5", "6"], ans: 1 },
+      ],
+      6: [
+        { q: "What is the HCF of 24 and 36?", opts: ["6", "8", "12", "18"], ans: 2 },
+        { q: "Which element has atomic number 1?", opts: ["Helium", "Hydrogen", "Lithium", "Oxygen"], ans: 1 },
+        { q: "What type of triangle has all equal sides?", opts: ["Isosceles", "Scalene", "Equilateral", "Right"], ans: 2 },
+        { q: "Who discovered gravity?", opts: ["Einstein", "Faraday", "Newton", "Galileo"], ans: 2 },
+        { q: "(−5) × (−4) = ?", opts: ["−20", "−9", "9", "20"], ans: 3 },
+        { q: "What is the SI unit of electric current?", opts: ["Volt", "Ohm", "Ampere", "Watt"], ans: 2 },
+        { q: "Which continent is the Sahara Desert in?", opts: ["Asia", "Australia", "South America", "Africa"], ans: 3 },
+        { q: "3³ = ?", opts: ["9", "18", "27", "36"], ans: 2 },
+        { q: "What is photosynthesis?", opts: ["Respiration process", "Food production using sunlight", "Digestion", "Reproduction"], ans: 1 },
+        { q: "Solve: 5(x−2) = 15. x = ?", opts: ["3", "4", "5", "6"], ans: 2 },
+      ],
+      7: [
+        { q: "What is the slope of the line y = 3x + 5?", opts: ["5", "3", "8", "−3"], ans: 1 },
+        { q: "Which gas is responsible for the greenhouse effect?", opts: ["Oxygen", "Nitrogen", "CO₂", "Hydrogen"], ans: 2 },
+        { q: "What is the perimeter of a circle called?", opts: ["Area", "Diameter", "Radius", "Circumference"], ans: 3 },
+        { q: "Newton's second law: F = ?", opts: ["mv", "ma", "mg", "½mv²"], ans: 1 },
+        { q: "√144 = ?", opts: ["11", "12", "13", "14"], ans: 1 },
+        { q: "What is an isosceles triangle?", opts: ["All sides equal", "No sides equal", "Two sides equal", "Right angle"], ans: 2 },
+        { q: "What is Ohm's Law?", opts: ["V = IR", "F = ma", "E = mc²", "P = IV"], ans: 0 },
+        { q: "Evaluate: 2⁵ + 3²", opts: ["38", "39", "40", "41"], ans: 3 },
+        { q: "Which blood cells fight infection?", opts: ["Red blood cells", "Platelets", "White blood cells", "Plasma"], ans: 2 },
+        { q: "What is the mean of 2, 4, 6, 8, 10?", opts: ["5", "6", "7", "8"], ans: 1 },
+      ],
+      8: [
+        { q: "Differentiate: d/dx (x³) = ?", opts: ["x²", "2x", "3x²", "3x"], ans: 2 },
+        { q: "What is the chemical formula of sulfuric acid?", opts: ["HCl", "H₂SO₄", "HNO₃", "H₃PO₄"], ans: 1 },
+        { q: "In a right triangle with legs 3 and 4, hypotenuse = ?", opts: ["5", "6", "7", "8"], ans: 0 },
+        { q: "What is the pH of pure water?", opts: ["5", "6", "7", "8"], ans: 2 },
+        { q: "log₁₀(1000) = ?", opts: ["2", "3", "4", "5"], ans: 1 },
+        { q: "What type of bond holds NaCl together?", opts: ["Covalent", "Metallic", "Ionic", "Hydrogen"], ans: 2 },
+        { q: "Solve: x² − 5x + 6 = 0", opts: ["x=1,2", "x=2,3", "x=3,4", "x=1,6"], ans: 1 },
+        { q: "What is the unit of frequency?", opts: ["Meter", "Joule", "Hertz", "Pascal"], ans: 2 },
+        { q: "Who proposed the theory of evolution?", opts: ["Mendel", "Lamarck", "Darwin", "Pasteur"], ans: 2 },
+        { q: "What is kinetic energy?", opts: ["Energy due to position", "Energy due to motion", "Stored energy", "Thermal energy"], ans: 1 },
+      ],
+      9: [
+        { q: "∫x² dx = ?", opts: ["x³", "x³/3 + C", "2x", "x²/2 + C"], ans: 1 },
+        { q: "What is Avogadro's number?", opts: ["6.022×10²³", "6.022×10²²", "6.022×10²⁴", "6.022×10²¹"], ans: 0 },
+        { q: "sin²θ + cos²θ = ?", opts: ["0", "1", "2", "sinθ·cosθ"], ans: 1 },
+        { q: "What is Faraday's constant approximately?", opts: ["96500 C/mol", "86500 C/mol", "76500 C/mol", "66500 C/mol"], ans: 0 },
+        { q: "Solve: 2x² − 8 = 0", opts: ["x=±1", "x=±2", "x=±3", "x=±4"], ans: 1 },
+        { q: "What is the SI unit of pressure?", opts: ["Newton", "Pascal", "Joule", "Watt"], ans: 1 },
+        { q: "Which law states: PV = nRT?", opts: ["Boyle's Law", "Charles's Law", "Ideal Gas Law", "Dalton's Law"], ans: 2 },
+        { q: "Evaluate lim(x→0) sinx/x = ?", opts: ["0", "∞", "1", "−1"], ans: 2 },
+        { q: "What is the valency of Carbon?", opts: ["2", "3", "4", "5"], ans: 2 },
+        { q: "cos(90°) = ?", opts: ["1", "−1", "0", "½"], ans: 2 },
+      ],
+    };
+
+    // ─── STATE ───────────────────────────────────────────────────
+    let studentName = '', selectedClass = 0, questions = [], answers = [], currentQ = 0;
+
+    // ─── START EXAM ──────────────────────────────────────────────
+    function startExam() {
+      studentName = document.getElementById('studentName').value.trim();
+      selectedClass = parseInt(document.getElementById('classSelect').value);
+      const err = document.getElementById('coverError');
+
+      if (!studentName) { err.textContent = 'Please enter your full name.'; return; }
+      if (!selectedClass) { err.textContent = 'Please select a class.'; return; }
+      err.textContent = '';
+
+      questions = QUESTIONS[selectedClass];
+      answers = new Array(questions.length).fill(null);
+      currentQ = 0;
+
+      document.getElementById('hdrName').textContent = studentName;
+      document.getElementById('hdrClass').textContent = `Class ${selectedClass} Entrance Exam`;
+
+      showPage('exam');
+      renderQuestion();
+      buildNavGrid();
+    }
+
+    // ─── RENDER QUESTION ─────────────────────────────────────────
+    function renderQuestion() {
+      const q = questions[currentQ];
+      const total = questions.length;
+
+      document.getElementById('qNumber').textContent = `Question ${currentQ + 1} of ${total}`;
+      document.getElementById('qText').textContent = q.q;
+      document.getElementById('progressLabel').textContent = `Question ${currentQ + 1} of ${total}`;
+      document.getElementById('progressFill').style.width = `${((currentQ + 1) / total) * 100}%`;
+      document.getElementById('answeredCount').textContent = answers.filter(a => a !== null).length;
+
+      const wrap = document.getElementById('optionsWrap');
+      wrap.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+      q.opts.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'option' + (answers[currentQ] === i ? ' selected' : '');
+        div.innerHTML = `<input type="radio" name="opt"><div class="opt-bullet">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+        div.onclick = () => selectAnswer(i);
+        wrap.appendChild(div);
+      });
+
+      document.getElementById('prevBtn').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+      document.getElementById('nextBtn').style.visibility = currentQ === total - 1 ? 'hidden' : 'visible';
+      document.getElementById('finishBtn').style.display = currentQ === total - 1 ? 'inline-block' : 'none';
+
+      updateNavGrid();
+    }
+
+    function selectAnswer(idx) {
+      answers[currentQ] = idx;
+      renderQuestion();
+    }
+
+    function navigate(dir) {
+      const next = currentQ + dir;
+      if (next >= 0 && next < questions.length) { currentQ = next; renderQuestion(); }
+    }
+
+    // ─── Q NAV GRID ──────────────────────────────────────────────
+    function buildNavGrid() {
+      const grid = document.getElementById('qNavGrid');
+      grid.innerHTML = '';
+      questions.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'q-nav-dot';
+        dot.textContent = i + 1;
+        dot.id = `dot-${i}`;
+        dot.onclick = () => { currentQ = i; renderQuestion(); };
+        grid.appendChild(dot);
+      });
+    }
+    function updateNavGrid() {
+      questions.forEach((_, i) => {
+        const dot = document.getElementById(`dot-${i}`);
+        if (!dot) return;
+        dot.className = 'q-nav-dot' + (i === currentQ ? ' current' : answers[i] !== null ? ' answered' : '');
+      });
+    }
+
+    // ─── FINISH ──────────────────────────────────────────────────
+    function finishExam() {
+      const unanswered = answers.filter(a => a === null).length;
+      if (unanswered > 0) {
+        if (!confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
+      }
+
+      let score = 0;
+      questions.forEach((q, i) => { if (answers[i] === q.ans) score++; });
+
+      document.getElementById('resultName').textContent = `${studentName}  ·  Class ${selectedClass}`;
+      document.getElementById('scoreNum').textContent = score;
+      document.getElementById('scoreTotal').textContent = `/ ${questions.length} marks`;
+
+      const pct = (score / questions.length) * 100;
+      const badge = document.getElementById('gradeBadge');
+      if (pct >= 50) { badge.textContent = '✓ PASSED'; badge.className = 'grade-badge pass'; }
+      else { badge.textContent = '✗ FAILED'; badge.className = 'grade-badge fail'; }
+      const resultData = {
+        name: studentName,
+        class: selectedClass,
+        score: score,
+        total: questions.length,
+        date: new Date().toLocaleString()
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbxylLOu5rUEHqyQ2JvJbYUdL-IPM11xhpF_3E_0GuE-7f1lJWPON9O-qDgtj831M5I/exec", {
+        method: "POST",
+        body: JSON.stringify(resultData)
+      })
+        .then(res => console.log("Saved:", res))
+        .catch(err => console.error("Error:", err));
+      // Breakdown
+      const list = document.getElementById('breakdownList');
+      list.innerHTML = '';
+      questions.forEach((q, i) => {
+        const userAns = answers[i];
+        const isCorrect = userAns === q.ans;
+        const skipped = userAns === null;
+        const div = document.createElement('div');
+        div.className = 'breakdown-item';
+        div.innerHTML = `
+      <div class="bd-q">
+        <div>${i + 1}. ${q.q}</div>
+        ${!isCorrect && !skipped ? `<div class="bd-correct-ans">Correct: ${q.opts[q.ans]}</div>` : ''}
+      </div>
+      <div class="bd-your">
+        ${skipped
+            ? `<span class="tag s">Skipped</span>`
+            : `<div style="font-size:12px;color:var(--muted);margin-bottom:3px">${q.opts[userAns]}</div>
+             <span class="tag ${isCorrect ? 'c' : 'w'}">${isCorrect ? '✓ Correct' : '✗ Wrong'}</span>`
+          }
+      </div>`;
+        list.appendChild(div);
+      });
+
+      showPage('result');
+    }
+
+    // ─── RESTART ─────────────────────────────────────────────────
+    function restartExam() {
+      document.getElementById('studentName').value = '';
+      document.getElementById('classSelect').value = '';
+      showPage('cover');
+    }
+
+    // ─── PAGE SWITCH ─────────────────────────────────────────────
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+
+</html>
